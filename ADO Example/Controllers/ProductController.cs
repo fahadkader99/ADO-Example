@@ -27,7 +27,22 @@ namespace ADO_Example.Controllers
         // GET: Product/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            try
+            {
+                var product = _productDal.GetProductByID(id).FirstOrDefault();              // FirstOrDefault - to get the 1st element from the List
+
+                if (product == null)
+                {
+                    TempData["InfoMessage"] = "Product not available with ID " + id.ToString();
+                    return RedirectToAction("Index");
+                }
+                return View(product);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return View();
+            }
         }
 
         // GET: Create Product view is from this function
@@ -69,15 +84,23 @@ namespace ADO_Example.Controllers
 
         // GET: Product/Edit/5
         public ActionResult Edit(int id)
-        {   
-            var products = _productDal.GetProductByID(id).FirstOrDefault();
-
-            if(products == null)
+        {
+            try
             {
-                TempData["InfoMessage"] = "Product not available with ID " + id.ToString();
-                return RedirectToAction("Index");
+                var products = _productDal.GetProductByID(id).FirstOrDefault();             // FirstOrDefault - to get the single product from the list
+
+                if (products == null)
+                {
+                    TempData["InfoMessage"] = "Product not available with ID " + id.ToString();
+                    return RedirectToAction("Index");
+                }
+                return View(products);
             }
-            return View(products);
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return View();
+            }
         }
 
         // POST: Update Product
@@ -113,23 +136,49 @@ namespace ADO_Example.Controllers
         // GET: Product/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            try
+            {
+                var product = _productDal.GetProductByID(id).FirstOrDefault();
+
+                if (product == null)
+                {
+                    TempData["InfoMessage"] = "Product not available with ID " + id.ToString();
+                    return RedirectToAction("Index");
+                }
+                return View(product);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return View();                                  // Here default view is the controller action method view
+            }
         }
 
         // POST: Product/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmation(int id)
         {
             try
             {
-                // TODO: Add delete logic here
+                string result = _productDal.DeleteProduct(id);
 
+                if (result.Contains("deleted"))
+                {
+                    TempData["SuccessMessage"] = result;
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = result;
+                }
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
+                TempData["ErrorMessage"] = ex.Message;
                 return View();
             }
+
+
         }
     }
 }

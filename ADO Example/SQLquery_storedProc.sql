@@ -106,3 +106,47 @@ set @RowCount = (select count(1) from dbo.tbl_ProductMaster where ProductName = 
 end
 
 
+
+----------
+-- Delete
+----------
+
+-- Validating if product exists in the table with the ID or not, if available then count will be > 0, then delete & show success message; otherwise show output message
+ALTER proc [dbo].[sp_DeleteProducts]
+(
+@PRODUCTID int,
+@OUTPUTMESSAGE varchar(50) output
+)
+as
+begin
+
+declare @rowcount int = 0;
+
+	begin try
+
+	set @rowcount = (select count(1) from dbo.tbl_ProductMaster where ProductID = @PRODUCTID)
+
+	if(@rowcount > 0)
+		begin
+			begin tran
+				delete from dbo.tbl_ProductMaster 
+				where ProductID = @PRODUCTID
+
+				set @OUTPUTMESSAGE = 'Product deleted successfully...!'
+			commit tran
+		end
+	else
+		begin
+			set @OUTPUTMESSAGE = 'Product not available with id ' + CONVERT(varchar, @PRODUCTID)
+		end
+
+	end try
+
+begin catch
+	rollback tran
+	set @OUTPUTMESSAGE = ERROR_MESSAGE()
+end catch
+
+end
+
+

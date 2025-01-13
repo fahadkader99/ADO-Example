@@ -179,7 +179,33 @@ namespace ADO_Example.Data
 
         }
 
+
+        /*
+        * Delete Product based on ID
+        */
+        public string DeleteProduct(int ProductID)
+        {
+            string result = "";
+
+            using (SqlConnection connection = new SqlConnection(conString))
+            {
+                SqlCommand command = new SqlCommand("sp_DeleteProducts", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@PRODUCTID",ProductID);
+                command.Parameters.Add("@OUTPUTMESSAGE", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
+
+                connection.Open();
+                command.ExecuteNonQuery();
+                result = command.Parameters["@OUTPUTMESSAGE"].Value.ToString();
+                connection.Close();
+            }
+            return result;
+        }
+
+
+
     }
+        
 
 
 }
