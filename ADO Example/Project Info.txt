@@ -1,0 +1,14 @@
+The project video tutorial can be found in the link below on youtube:
+
+https://www.youtube.com/watch?v=PDz01c6iuJk&list=PLtNXxhX8HfFCi8BcCHaWFFAhUwzzdG5Nt&index=78
+
+---------------------------------------------------------------------
+
+# Project: ASP.NET Web Application (.Net Framework)
+An ASP.NET Web Application is a full-fledged web application that includes a frontend (UI) and a backend (server-side logic). It is typically built using ASP.NET MVC, Razor Pages, or Blazor.
+
+✅ Key Features:
+✔ Has a User Interface (UI) → Uses HTML, CSS, JavaScript, and Razor Views.
+✔ Handles both frontend and backend → Users interact with the application directly.
+✔ Uses MVC (Model-View-Controller) or Razor Pages to structure the app.
+✔ Ideal for websites, admin panels, dashboards, e-commerce platforms, etc.
